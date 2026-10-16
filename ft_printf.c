@@ -6,43 +6,11 @@
 /*   By: spaccaud <spaccaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/14 11:19:06 by spaccaud          #+#    #+#             */
-/*   Updated: 2026/10/16 13:59:51 by spaccaud         ###   ########.fr       */
+/*   Updated: 2026/10/16 15:05:44 by spaccaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft/libft.h"
-#include <stdarg.h>
-
-int	is_valid_base(char *base);
-
-int	ft_putnbr_base(unsigned long nbr, char *base)
-{
-	int				size;
-	char			c;
-	unsigned long	n;
-	int				i;
-
-	i = 0;
-	n = nbr;
-	c = 0;
-	size = 0;
-	size = ft_strlen(base);
-	if (is_valid_base(base) == 1)
-	{
-		if (n < 0)
-		{
-			write(1, "-", 1);
-			n = -n;
-			i++;
-		}
-		if (n >= size)
-			i += ft_putnbr_base(n / size, base);
-		i++;
-		c = base[n % size];
-		write(1, &c, 1);
-	}
-	return (i);
-}
+#include "printf.h"
 
 int	is_valid_base(char *base)
 {
@@ -69,6 +37,35 @@ int	is_valid_base(char *base)
 		i++;
 	}
 	return (1);
+}
+
+int	ft_putnbr_base(unsigned long nbr, char *base)
+{
+	unsigned long	size;
+	char			c;
+	unsigned long	n;
+	int				i;
+
+	i = 0;
+	n = nbr;
+	c = 0;
+	size = 0;
+	size = ft_strlen(base);
+	if (is_valid_base(base) == 1)
+	{
+		if (n < 0)
+		{
+			write(1, "-", 1);
+			n = -n;
+			i++;
+		}
+		if (n >= size)
+			i += ft_putnbr_base(n / size, base);
+		i++;
+		c = base[n % size];
+		write(1, &c, 1);
+	}
+	return (i);
 }
 
 int	ft_check_purcent(char c, va_list args)
@@ -145,10 +142,10 @@ int	ft_printf(const char *s, ...)
 // 	n_2 = 17;
 // 	n_3 = 4294967279;
 // 	nbr_print = ft_printf("hello world, %%, [%c], [%s], [%p], [%d], [%i], [%u],
-// 			[%x], [%X] \n", ptr[3], ptr, ptr, n_signed, i_signed, un, n_2, n_3);
+//			[%x], [%X] \n", ptr[3], ptr, ptr, n_signed, i_signed, un, n_2, n_3);
 // 	printf(" sum %d \n", nbr_print);
 // 	nbr_print = printf("hello world, %%, [%c], [%s], [%p], [%d], [%i], [%u],
-// 			[%x], [%X] \n", ptr[3], ptr, ptr, n_signed, i_signed, un, n_2, n_3);
+//			[%x], [%X] \n", ptr[3], ptr, ptr, n_signed, i_signed, un, n_2, n_3);
 // 	printf(" sum %d \n", nbr_print);
 // 	return (0);
 // }
