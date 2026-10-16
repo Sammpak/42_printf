@@ -6,42 +6,42 @@
 /*   By: spaccaud <spaccaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/14 11:19:06 by spaccaud          #+#    #+#             */
-/*   Updated: 2026/10/15 15:43:40 by spaccaud         ###   ########.fr       */
+/*   Updated: 2026/10/16 13:54:39 by spaccaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
 #include <stdarg.h>
 
-int		is_valid_base(char *base);
+int	is_valid_base(char *base);
 
-void	ft_putnbr_base(unsigned long nbr, char *base)
+int	ft_putnbr_base(unsigned long nbr, char *base)
 {
-	int				basecheck;
 	int				size;
 	char			c;
 	unsigned long	n;
+	int				i;
 
+	i = 0;
 	n = nbr;
 	c = 0;
 	size = 0;
-	basecheck = 0;
-	basecheck = is_valid_base(base);
 	size = ft_strlen(base);
-	if (basecheck == 1)
+	if (is_valid_base(base) == 1)
 	{
 		if (n < 0)
 		{
 			write(1, "-", 1);
 			n = -n;
+			i++;
 		}
 		if (n >= size)
-		{
-			ft_putnbr_base(n / size, base);
-		}
+			i += ft_putnbr_base(n / size, base);
+		i++;
 		c = base[n % size];
 		write(1, &c, 1);
 	}
+	return (i);
 }
 
 int	is_valid_base(char *base)
@@ -71,84 +71,86 @@ int	is_valid_base(char *base)
 	return (1);
 }
 
+int	ft_check_purcent(char c, va_list args)
+{
+	int	len;
+
+	len = 0;
+	if (c == '%')
+		len += ft_putchar_fd('%', 1);
+	else if (c == 'c')
+		len += ft_putchar_fd(va_arg(args, int), 1);
+	else if (c == 's')
+		len += ft_putstr_fd(va_arg(args, char *), 1);
+	else if (c == 'p')
+	{
+		len += ft_putstr_fd("0x", 1);
+		len += ft_putnbr_base(va_arg(args, long), "0123456789abcdef");
+	}
+	else if (c == 'i' || c == 'd')
+		len += ft_putnbr_fd(va_arg(args, int), 1);
+	else if (c == 'u')
+		len += ft_putnbr_base(va_arg(args, unsigned int), "0123456789");
+	else if (c == 'x')
+		len += ft_putnbr_base(va_arg(args, unsigned int), "0123456789abcdef");
+	else if (c == 'X')
+		len += ft_putnbr_base(va_arg(args, unsigned int), "0123456789ABCDEF");
+	else
+		return (-1);
+	return (len);
+}
+
 int	ft_printf(const char *s, ...)
 {
 	int		i;
 	int		len;
-	char	*temp;
+	int		result;
 	va_list	args;
-	char	*base_up;
-	char	*base_low;
 
 	va_start(args, s);
-	base_up = "0123456789ABCDEF";
-	base_low = "0123456789abcdef";
 	i = 0;
 	len = 0;
 	while (s[i])
-	{
-		if (s[i] == '%')
+	{	
+		result = 0;
+		if(s[i] == '%')
 		{
-			if (s[i + 1] == '%')
-				ft_putchar_fd('%', 1);
-			else if (s[i + 1] == 'c')
-				ft_putchar_fd(va_arg(args, int), 1);
-			else if (s[i + 1] == 's')
+			i++;
+			result = ft_check_purcent(s[i], args);
+			if (result != -1)
 			{
-				ft_putstr_fd(va_arg(args, char *), 1);
+				i++;
+				len += result;
+				result = 0;
 			}
-			else if (s[i + 1] == 'p')
-			{
-				ft_putstr_fd("0x", 1);
-				ft_putnbr_base(va_arg(args, long), base_low);
-			}
-			else if (s[i + 1] == 'i' || s[i + 1] == 'd')
-			{
-				ft_putnbr_fd(va_arg(args, int), 1);
-			}
-			else if (s[i + 1] == 'u')
-			{
-				ft_putnbr_base(va_arg(args, unsigned int), "0123456789");
-			}
-			else if (s[i + 1] == 'x')
-			{
-				ft_putnbr_base(va_arg(args, unsigned int), base_low);
-			}
-			else if (s[i + 1] == 'X')
-			{
-				ft_putnbr_base(va_arg(args, unsigned int), base_up);
-			} else {
-				return -1;
-			}
-			i += 2;
-			len++;
-		}			
-		write(1,&s[i],1);
+		}
+		write(1, &s[i], 1);
+		len++;
 		i++;
 	}
-	return (len + i);
+	va_end(args);
+	return (len);
 }
 
-// va_start, va_arg, va_copy, va_end
 int	main(void)
 {
-	int nbr_print;
-	char *ptr;
+	int				nbr_print;
+	char			*ptr;
+	int				n_signed;
+	int				i_signed;
+	unsigned int	un;
+	unsigned int	n_2;
+	unsigned int	n_3;
+
 	ptr = "hello world";
-
-	unsigned int un;
-	unsigned int n;
-	unsigned int n_2;
-	unsigned int n_3;
-
-	n = 10;
+	n_signed = 1000;
+	i_signed = -123;
+	un = 23;
 	n_2 = 17;
-	n_3 = -17;
-	un = -123;
-	nbr_print = ft_printf("hello world, %%, [%c], [%s], [%p], [%d], [%i], [%u], [%x], [%X]", 	ptr[2], ptr, ptr, n, un, un, n_2, n_3);
+	n_3 = 4294967279;
+	nbr_print = ft_printf("hello world, %%, [%c], [%s], [%p], [%d], [%i], [%u], [%x], [%X] \n", ptr[3], ptr, ptr, n_signed, i_signed, un, n_2, n_3);
 	printf(" sum %d \n", nbr_print);
-	nbr_print = printf("hello world, %%, [%c], [%s], [%p], [%d], [%i], [%u], [%x], [%X]", 		ptr[2], ptr, ptr, n, un, un, n_2, n_3);
+	nbr_print = printf("hello world, %%, [%c], [%s], [%p], [%d], [%i], [%u], [%x], [%X] \n", ptr[3], ptr, ptr, n_signed, i_signed, un, n_2, n_3);
 	printf(" sum %d \n", nbr_print);
-
 	return (0);
 }
