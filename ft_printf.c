@@ -6,7 +6,7 @@
 /*   By: spaccaud <spaccaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/14 11:19:06 by spaccaud          #+#    #+#             */
-/*   Updated: 2026/10/16 13:54:39 by spaccaud         ###   ########.fr       */
+/*   Updated: 2026/10/16 13:59:51 by spaccaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,46 +111,44 @@ int	ft_printf(const char *s, ...)
 	i = 0;
 	len = 0;
 	while (s[i])
-	{	
+	{
 		result = 0;
-		if(s[i] == '%')
+		if (s[i] == '%')
 		{
-			i++;
-			result = ft_check_purcent(s[i], args);
+			result = ft_check_purcent(s[++i], args);
 			if (result != -1)
 			{
 				i++;
 				len += result;
-				result = 0;
 			}
 		}
-		write(1, &s[i], 1);
-		len++;
-		i++;
+		len += ft_putchar_fd(s[i++], 1);
 	}
 	va_end(args);
 	return (len);
 }
 
-int	main(void)
-{
-	int				nbr_print;
-	char			*ptr;
-	int				n_signed;
-	int				i_signed;
-	unsigned int	un;
-	unsigned int	n_2;
-	unsigned int	n_3;
+// int	main(void)
+// {
+// 	int				nbr_print;
+// 	char			*ptr;
+// 	int				n_signed;
+// 	int				i_signed;
+// 	unsigned int	un;
+// 	unsigned int	n_2;
+// 	unsigned int	n_3;
 
-	ptr = "hello world";
-	n_signed = 1000;
-	i_signed = -123;
-	un = 23;
-	n_2 = 17;
-	n_3 = 4294967279;
-	nbr_print = ft_printf("hello world, %%, [%c], [%s], [%p], [%d], [%i], [%u], [%x], [%X] \n", ptr[3], ptr, ptr, n_signed, i_signed, un, n_2, n_3);
-	printf(" sum %d \n", nbr_print);
-	nbr_print = printf("hello world, %%, [%c], [%s], [%p], [%d], [%i], [%u], [%x], [%X] \n", ptr[3], ptr, ptr, n_signed, i_signed, un, n_2, n_3);
-	printf(" sum %d \n", nbr_print);
-	return (0);
-}
+// 	ptr = "hello world";
+// 	n_signed = 1000;
+// 	i_signed = -123;
+// 	un = 23;
+// 	n_2 = 17;
+// 	n_3 = 4294967279;
+// 	nbr_print = ft_printf("hello world, %%, [%c], [%s], [%p], [%d], [%i], [%u],
+// 			[%x], [%X] \n", ptr[3], ptr, ptr, n_signed, i_signed, un, n_2, n_3);
+// 	printf(" sum %d \n", nbr_print);
+// 	nbr_print = printf("hello world, %%, [%c], [%s], [%p], [%d], [%i], [%u],
+// 			[%x], [%X] \n", ptr[3], ptr, ptr, n_signed, i_signed, un, n_2, n_3);
+// 	printf(" sum %d \n", nbr_print);
+// 	return (0);
+// }
