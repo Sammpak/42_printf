@@ -6,15 +6,17 @@
 In this project, I recoded the standard `printf` function. It was a great challenge to discover and learn how to use variadic functions in C. This function will be very useful for my upcoming projects at 42.
 
 I have implemented theses function :
-• %c Prints a single character.
-• %s Prints a string (as defined by the common C convention).
-• %p The void * pointer argument has to be printed in hexadecimal format.
-• %d Prints a decimal (base 10) number.
-• %i Prints an integer in base 10.
-• %u Prints an unsigned decimal (base 10) number.
-• %x Prints a number in hexadecimal (base 16) lowercase format.
-• %X Prints a number in hexadecimal (base 16) uppercase format.
-• %% Prints a percent sign.
+| Specifier | Description | Example |
+| :---: | :--- | :--- |
+| **`%c`** | Prints a single character. | `'a'` |
+| **`%s`** | Prints a string (according to standard C conventions). | `"Hello, World!"` |
+| **`%p`** | Prints a `void *` pointer argument in hexadecimal format. | `0x7fff5fbff618` |
+| **`%d`** | Prints a decimal (base 10) number. | `-42` |
+| **`%i`** | Prints an integer in base 10. | `42` |
+| **`%u`** | Prints an unsigned decimal (base 10) number. | `4294967295` |
+| **`%x`** | Prints a number in hexadecimal (base 16) **lowercase** format. | `2fa3` |
+| **`%X`** | Prints a number in hexadecimal (base 16) **uppercase** format. | `2FA3` |
+| **`%%`** | Prints a literal percent sign. | `%` |
 
 ## Instructions  
 To compile the library, you can use the provided `Makefile` with the following rules:
