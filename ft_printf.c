@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "printf.h"
+#include "ft_printf.h"
 
 int	is_valid_base(char *base)
 {
@@ -78,11 +78,17 @@ int	ft_check_purcent(char c, va_list args)
 	else if (c == 'c')
 		len += ft_putchar_fd(va_arg(args, int), 1);
 	else if (c == 's')
-		len += ft_putstr_fd(va_arg(args, char *), 1);
+	{
+		str = va_arg(args, char *);
+		if (!str)
+			len += ft_putstr_fd("(null)", 1);
+		else
+			len += ft_putstr_fd(str, 1);
+	}
 	else if (c == 'p')
 	{
 		len += ft_putstr_fd("0x", 1);
-		len += ft_putnbr_base(va_arg(args, long), "0123456789abcdef");
+		len += ft_putnbr_base((unsigned long)va_arg(args, void *), "0123456789abcdef");
 	}
 	else if (c == 'i' || c == 'd')
 		len += ft_putnbr_fd(va_arg(args, int), 1);
@@ -104,22 +110,32 @@ int	ft_printf(const char *s, ...)
 	int		result;
 	va_list	args;
 
+	if (!s)
+		return (-1);
 	va_start(args, s);
 	i = 0;
 	len = 0;
 	while (s[i])
 	{
-		result = 0;
-		if (s[i] == '%')
+		if (s[i] == '%' && s[i + 1])
 		{
-			result = ft_check_purcent(s[++i], args);
-			if (result != -1)
+			result = ft_check_purcent(s[i + 1], args);
+			if (result == -1)
 			{
+				len += ft_putchar_fd(s[i], 1);
 				i++;
+			}
+			else
+			{
 				len += result;
+				i += 2;
 			}
 		}
-		len += ft_putchar_fd(s[i++], 1);
+		else
+		{
+			len += ft_putchar_fd(s[i], 1);
+			i++;
+		}
 	}
 	va_end(args);
 	return (len);
