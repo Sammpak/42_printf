@@ -6,7 +6,7 @@
 /*   By: spaccaud <spaccaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/14 11:19:06 by spaccaud          #+#    #+#             */
-/*   Updated: 2026/10/16 15:05:44 by spaccaud         ###   ########.fr       */
+/*   Updated: 2026/10/19 11:13:36 by spaccaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	ft_putnbr_base(unsigned long nbr, char *base)
 int	ft_check_purcent(char c, va_list args)
 {
 	int	len;
-
+	char *str;
 	len = 0;
 	if (c == '%')
 		len += ft_putchar_fd('%', 1);

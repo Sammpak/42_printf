@@ -1,4 +1,4 @@
 *.o
 a.out
-printf.a
+libftprintf.a
 libft/
